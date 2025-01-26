@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import LandingPage from "./components/LandingPage";
+import Dashboard from "./components/Dashboard";
+import "./components/styles.css";
 
 const App = () => {
+  const [isLogin, setIsLogin] = useState(true);
+
   return (
-    <div>
-      <h1>Welcome to CatCare</h1>
-      <p>Manage all your cat’s information in one place!</p>
-    </div>
+    <Router>
+      <div className="app-container">
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 

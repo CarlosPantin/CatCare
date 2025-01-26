@@ -2,8 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const catRoutes = require("./routes/catRoutes");
 const userRoutes = require("./routes/userRoutes");
+const catRoutes = require("./routes/catRoutes");
 
 dotenv.config();
 
@@ -12,8 +12,9 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors());
-app.use("/api", catRoutes);
-app.use("/api", userRoutes);
+
+app.use("/api/users", userRoutes);  
+app.use("/api", catRoutes);    
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
@@ -28,7 +29,7 @@ mongoose
   });
 
 app.get("/", (req, res) => {
-  res.send("CatCare backend is running!");
+  res.send("Backend is running!");
 });
 
 app.listen(PORT, () => {
