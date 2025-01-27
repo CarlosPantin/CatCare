@@ -1,11 +1,23 @@
 const express = require("express");
+const multer = require("multer");
+const path = require("path");
 const Cat = require("../models/Cat");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 
-// Middleware to authenticate user from JWT token
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage });
+
 const authenticateUser = async (req, res, next) => {
   const token = req.header("Authorization")?.replace("Bearer ", "");
 
@@ -18,68 +30,68 @@ const authenticateUser = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
-    console.log(user);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    req.user = user; // Attach the user to the request object
-    next(); // Proceed to the next middleware or route handler
+    req.user = user;
+    next();
   } catch (error) {
     res.status(401).json({ error: "Invalid or expired token" });
   }
 };
 
-// Create a new cat profile (authentication required)
-router.post("/cats", authenticateUser, async (req, res) => {
-  try {
-    const { name, birthdate, breed, neutered, gender, weight, photo } =
-      req.body;
+// POST route to create a new cat with photo upload
+router.post(
+  "/cats",
+  authenticateUser,
+  upload.single("photo"),
+  async (req, res) => {
+    try {
+      const { name, birthdate, breed, neutered, gender, weight } = req.body;
 
-    // Ensure all required fields are provided
-    if (!name || !gender) {
-      return res.status(400).json({ error: "Name and gender are required" });
+      if (!name || !gender) {
+        return res.status(400).json({ error: "Name and gender are required" });
+      }
+
+      const newCat = new Cat({
+        name,
+        birthdate,
+        breed,
+        neutered,
+        gender,
+        weight,
+        photo: req.file ? req.file.path : null,
+        owner: req.user._id,
+      });
+
+      await newCat.save();
+
+      req.user.cats.push(newCat._id);
+      await req.user.save();
+
+      res.status(201).json(newCat);
+    } catch (err) {
+      console.error("Error creating cat:", err);
+      res.status(400).json({ error: err.message });
     }
-
-    // Create the new cat
-    const newCat = new Cat({
-      name,
-      birthdate,
-      breed,
-      neutered,
-      gender,
-      weight,
-      photo,
-      owner: req.user._id, // Link the cat to the authenticated user
-    });
-
-    // Save the cat
-    await newCat.save();
-
-    // Link the cat to the user's cats array
-    req.user.cats.push(newCat._id);
-    await req.user.save();
-
-    res.status(201).json(newCat); // Return the newly created cat
-  } catch (err) {
-    res.status(400).json({ error: err.message });
   }
-});
+);
 
-// Get all cats for the authenticated user
+// GET route to fetch all cats for the authenticated user
 router.get("/cats", authenticateUser, async (req, res) => {
   try {
-    // Populate the cats field for the authenticated user
-    await req.user.populate("cats");
-
-    res.status(200).json(req.user.cats); // Return the user's cats
+    const cats = await Cat.find({ owner: req.user._id });
+    console.log("Fetched cats:", cats);
+    res.status(200).json(cats);
   } catch (err) {
+    console.error("Error fetching cats:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Get a single cat by ID (authentication required)
+// GET route to fetch a specific cat by ID
 router.get("/cats/:id", authenticateUser, async (req, res) => {
   try {
     const cat = await Cat.findById(req.params.id).populate("owner");
@@ -96,11 +108,12 @@ router.get("/cats/:id", authenticateUser, async (req, res) => {
 
     res.status(200).json(cat);
   } catch (err) {
+    console.error("Error fetching cat:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Update a cat's profile (authentication required)
+// PUT route to update a cat's details
 router.put("/cats/:id", authenticateUser, async (req, res) => {
   try {
     const cat = await Cat.findById(req.params.id);
@@ -121,10 +134,12 @@ router.put("/cats/:id", authenticateUser, async (req, res) => {
 
     res.status(200).json(updatedCat);
   } catch (err) {
+    console.error("Error updating cat:", err);
     res.status(400).json({ error: err.message });
   }
 });
 
+// DELETE route to delete a cat
 router.delete("/cats/:id", authenticateUser, async (req, res) => {
   try {
     const cat = await Cat.findById(req.params.id);
@@ -146,6 +161,7 @@ router.delete("/cats/:id", authenticateUser, async (req, res) => {
 
     res.status(200).json({ message: "Cat profile deleted" });
   } catch (err) {
+    console.error("Error deleting cat:", err);
     res.status(500).json({ error: err.message });
   }
 });

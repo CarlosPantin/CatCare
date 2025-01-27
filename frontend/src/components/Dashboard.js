@@ -1,28 +1,43 @@
-// src/components/Dashboard.js
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import AddCatForm from "./AddCatForm";
+import "./Dashboard.css";
 
 const Dashboard = () => {
-  const [cats, setCats] = useState([]); 
+  const [cats, setCats] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    
-    const token = localStorage.getItem("token");
-
-   
     const fetchCats = async () => {
+      const token = localStorage.getItem("token");
+      console.log("Token:", token);
+
+      if (!token) {
+        alert("No token found. Please log in again.");
+        return;
+      }
+
       try {
-        const response = await axios.get("/api/cats", {
-          headers: {
-            Authorization: `Bearer ${token}`, 
-          },
-        });
-        setCats(response.data); 
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_BASE_URL}/api/cats`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Cats fetched:", response.data);
+        setCats(response.data);
       } catch (error) {
         console.error("Error fetching cats:", error);
-        alert("There was an error fetching your cats.");
+        if (error.response && error.response.status === 401) {
+          alert("Your session has expired. Please log in again.");
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+        } else {
+          alert("There was an error fetching your cats.");
+        }
       } finally {
         setLoading(false);
       }
@@ -31,29 +46,48 @@ const Dashboard = () => {
     fetchCats();
   }, []);
 
+  const handleCatAdded = (newCat) => {
+    setCats([...cats, newCat]);
+    setShowForm(false);
+  };
+
   if (loading) {
-    return <div>Loading your cats...</div>;
+    return <div className="loading-message">Loading your cats...</div>;
   }
 
   return (
     <div className="dashboard-container">
       <h1>Your Cats</h1>
 
-      {cats.length > 0 ? (
-        <div className="cats-list">
-          {cats.map((cat) => (
-            <div key={cat._id} className="cat-card">
-              <img src={cat.photo} alt={cat.name} className="cat-photo" />
-              <h3>{cat.name}</h3>
-              <p>Breed: {cat.breed}</p>
-              <p>Gender: {cat.gender}</p>
-              <p>Weight: {cat.weight} kg</p>
-              <p>Neutered: {cat.neutered ? "Yes" : "No"}</p>
+      <button onClick={() => setShowForm(!showForm)}>
+        {showForm ? "Hide Form" : "Add a New Cat"}
+      </button>
+
+      {showForm && <AddCatForm onCatAdded={handleCatAdded} />}
+
+      {!showForm && (
+        <>
+          {cats.length > 0 ? (
+            <div className="cats-list">
+              {cats.map((cat) => (
+                <div key={cat._id} className="cat-card">
+                  <img
+                    src={`${process.env.REACT_APP_API_BASE_URL}/${cat.photo}`}
+                    alt={cat.name}
+                    className="cat-photo"
+                  />
+                  <h3>{cat.name}</h3>
+                  <p>Breed: {cat.breed}</p>
+                  <p>Gender: {cat.gender}</p>
+                  <p>Weight: {cat.weight} kg</p>
+                  <p>Neutered: {cat.neutered ? "Yes" : "No"}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      ) : (
-        <p>You have no cats associated with your account.</p>
+          ) : (
+            <p>You have no cats associated with your account.</p>
+          )}
+        </>
       )}
     </div>
   );
