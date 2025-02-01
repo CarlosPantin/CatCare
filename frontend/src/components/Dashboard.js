@@ -11,16 +11,12 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchCats = async () => {
       const token = localStorage.getItem("token");
-      console.log("Token:", token);
 
       if (!token) {
         alert("No token found. Please log in again.");
         return;
       }
-      const API_BASE_URL = "https://catcare-clak.onrender.com";
 
-      console.log("NODE_ENV:", process.env.NODE_ENV);
-      console.log("API BASE URL:", API_BASE_URL);
       try {
         const response = await axios.get(
           "https://catcare-clak.onrender.com/api/cats",
@@ -30,10 +26,8 @@ const Dashboard = () => {
             },
           }
         );
-        console.log("Cats fetched:", response.data);
         setCats(response.data);
       } catch (error) {
-        console.error("Error fetching cats:", error);
         if (error.response && error.response.status === 401) {
           alert("Your session has expired. Please log in again.");
           localStorage.removeItem("token");
@@ -53,10 +47,6 @@ const Dashboard = () => {
     setCats([...cats, newCat]);
     setShowForm(false);
   };
-  console.log(
-    "Final API URL:",
-    `${process.env.REACT_APP_API_BASE_URL}/api/cats`
-  );
 
   if (loading) {
     return <div className="loading-message">Loading your cats...</div>;
