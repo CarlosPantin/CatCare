@@ -92,7 +92,7 @@ const LandingPage = () => {
       </section>
 
       <footer className="landing-footer">
-        <p>&copy; 2025 CatCare. All Rights Reserved.</p>
+        <p>&copy; 2025 CatCare. a Carlos Pantin Project </p>
       </footer>
     </div>
   );

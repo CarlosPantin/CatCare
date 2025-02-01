@@ -14,10 +14,13 @@ const Register = () => {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:5000/api/users/register", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/users/register",
+        {
+          email,
+          password,
+        }
+      );
 
       if (response.status === 201) {
         alert("Registration successful!");
@@ -30,31 +33,33 @@ const Register = () => {
   };
 
   return (
-    <div className="auth-form-container">
-      <h2>Register to Get Started!</h2>
-      <p>Create an account to begin managing your cat’s care efficiently.</p>
-      {error && <p className="error-message">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Register</button>
-      </form>
+    <div className="auth-wrapper">
+      <div className="auth-form-container">
+        <h2>Register to Get Started!</h2>
+        <p>Create an account to begin managing your cat’s care efficiently.</p>
+        {error && <p className="error-message">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit">Register</button>
+        </form>
+      </div>
     </div>
   );
 };
