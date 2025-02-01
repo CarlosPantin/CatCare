@@ -17,10 +17,15 @@ const Dashboard = () => {
         alert("No token found. Please log in again.");
         return;
       }
-
+      const API_BASE_URL =
+        process.env.NODE_ENV === "production"
+          ? "https://catcare-clak.onrender.com"
+          : "http://localhost:5000";
+      console.log("NODE_ENV:", process.env.NODE_ENV);
+      console.log("API BASE URL:", API_BASE_URL);
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/api/cats`,
+          `${process.env.API_BASE_URL}/api/cats`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
