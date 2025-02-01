@@ -6,7 +6,6 @@ const userRoutes = require("./routes/userRoutes");
 const catRoutes = require("./routes/catRoutes");
 const path = require("path");
 
-
 dotenv.config();
 
 const app = express();
@@ -18,6 +17,24 @@ app.use(cors());
 
 app.use("/api/users", userRoutes);
 app.use("/api", catRoutes);
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://catcare-vert.vercel.app",
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
