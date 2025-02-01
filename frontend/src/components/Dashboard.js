@@ -77,7 +77,11 @@ const Dashboard = () => {
               {cats.map((cat) => (
                 <div key={cat._id} className="cat-card">
                   <img
-                    src={`${process.env.REACT_APP_API_BASE_URL}/${cat.photo}`}
+                    src={
+                      cat.photo
+                        ? `${process.env.REACT_APP_API_BASE_URL}/${cat.photo}`
+                        : "/default-photo.jpg"
+                    }
                     alt={cat.name}
                     className="cat-photo"
                   />
