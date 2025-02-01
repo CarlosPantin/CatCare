@@ -4,7 +4,6 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import LandingPage from "./components/LandingPage";
 import Dashboard from "./components/Dashboard";
-import "./components/styles.css";
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(true);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./Auth.css";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -10,17 +11,20 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); 
+    setError("");
 
     try {
-      const response = await axios.post("http://localhost:5000/api/users/login", {
-        email,
-        password
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/users/login",
+        {
+          email,
+          password,
+        }
+      );
 
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
-        navigate("/dashboard"); 
+        navigate("/dashboard");
       }
     } catch (err) {
       console.error("Login Error:", err);
@@ -29,8 +33,9 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="login-form-container">
-      <h2>Login</h2>
+    <div className="auth-form-container">
+      <h2>Welcome Back!</h2>
+      <p>Log in to your account and start managing your cat's care!</p>
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>

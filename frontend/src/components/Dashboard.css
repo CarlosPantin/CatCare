@@ -1,5 +1,5 @@
 body {
-  font-family: "Arial", sans-serif;
+  font-family: 'Arial', sans-serif;
   background-color: #f4f4f9;
   margin: 0;
   padding: 0;
@@ -33,7 +33,6 @@ button:hover {
   background-color: #2980b9;
 }
 
-/* Cats list */
 .cats-list {
   display: flex;
   flex-wrap: wrap;
@@ -71,7 +70,6 @@ button:hover {
   color: #7f8c8d;
 }
 
-/* Add Cat Form */
 .cat-form {
   background-color: white;
   padding: 20px;
@@ -123,7 +121,6 @@ button:hover {
   background-color: #219653;
 }
 
-/* Loading message */
 .loading-message {
   text-align: center;
   font-size: 18px;
