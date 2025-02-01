@@ -20,10 +20,13 @@ const LoginForm = () => {
     console.log("NODE_ENV:", process.env.NODE_ENV);
     console.log("API BASE URL:", API_BASE_URL);
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/users/login`, {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "https://catcare-clak.onrender.com/api/users/login",
+        {
+          email,
+          password,
+        }
+      );
 
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
