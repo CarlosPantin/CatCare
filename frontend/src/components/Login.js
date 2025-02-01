@@ -17,7 +17,8 @@ const LoginForm = () => {
       process.env.NODE_ENV === "production"
         ? process.env.REACT_APP_API_BASE_URL_PRODUCTION
         : process.env.REACT_APP_API_BASE_URL;
-
+    console.log("NODE_ENV:", process.env.NODE_ENV);
+    console.log("API BASE URL:", API_BASE_URL);
     try {
       const response = await axios.post(`${API_BASE_URL}/api/users/login`, {
         email,
