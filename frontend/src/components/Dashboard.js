@@ -55,6 +55,10 @@ const Dashboard = () => {
     setCats([...cats, newCat]);
     setShowForm(false);
   };
+  console.log(
+    "Final API URL:",
+    `${process.env.REACT_APP_API_BASE_URL}/api/cats`
+  );
 
   if (loading) {
     return <div className="loading-message">Loading your cats...</div>;
