@@ -13,14 +13,16 @@ const LoginForm = () => {
     e.preventDefault();
     setError("");
 
+    const API_BASE_URL =
+      process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_API_BASE_URL_PRODUCTION
+        : process.env.REACT_APP_API_BASE_URL;
+
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/users/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post(`${API_BASE_URL}/api/users/login`, {
+        email,
+        password,
+      });
 
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
