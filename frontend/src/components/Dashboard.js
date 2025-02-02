@@ -51,14 +51,14 @@ const Dashboard = () => {
   };
 
   if (loading) {
-    return <div className="loading-message">Loading your cats...</div>;
+    return <div className="dashboard-loading-message">Loading your cats...</div>;
   }
 
   return (
-    <div className="dashboard-container">
-      <h1>Your Cats</h1>
+    <div className="dashboard-main-container">
+      <h1 className="dashboard-header">Your Cats</h1>
 
-      <button onClick={() => setShowForm(!showForm)}>
+      <button className="dashboard-toggle-form-button" onClick={() => setShowForm(!showForm)}>
         {showForm ? "Hide Form" : "Add a New Cat"}
       </button>
 
@@ -67,9 +67,9 @@ const Dashboard = () => {
       {!showForm && (
         <>
           {cats.length > 0 ? (
-            <div className="cats-list">
+            <div className="dashboard-cat-list-container">
               {cats.map((cat) => (
-                <div key={cat._id} className="cat-card">
+                <div key={cat._id} className="dashboard-cat-card">
                   <img
                     src={
                       cat.photo
@@ -77,18 +77,18 @@ const Dashboard = () => {
                         : "/default-photo.jpg"
                     }
                     alt={cat.name}
-                    className="cat-photo"
+                    className="dashboard-cat-photo"
                   />
-                  <h3>{cat.name}</h3>
-                  <p>Breed: {cat.breed}</p>
-                  <p>Gender: {cat.gender}</p>
-                  <p>Weight: {cat.weight} kg</p>
-                  <p>Neutered: {cat.neutered ? "Yes" : "No"}</p>
+                  <h3 className="dashboard-cat-name">{cat.name}</h3>
+                  <p className="dashboard-cat-breed">Breed: {cat.breed}</p>
+                  <p className="dashboard-cat-gender">Gender: {cat.gender}</p>
+                  <p className="dashboard-cat-weight">Weight: {cat.weight} kg</p>
+                  <p className="dashboard-cat-neutered">Neutered: {cat.neutered ? "Yes" : "No"}</p>
                 </div>
               ))}
             </div>
           ) : (
-            <p>You have no cats associated with your account.</p>
+            <p className="dashboard-no-cats-message">You have no cats associated with your account.</p>
           )}
         </>
       )}
