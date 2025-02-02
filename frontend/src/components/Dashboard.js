@@ -17,15 +17,17 @@ const Dashboard = () => {
         return;
       }
 
+      const API_BASE_URL =
+        process.env.NODE_ENV === "production"
+          ? process.env.REACT_APP_API_BASE_URL_PRODUCTION
+          : process.env.REACT_APP_API_BASE_URL;
+
       try {
-        const response = await axios.get(
-          "https://catcare-clak.onrender.com/api/cats",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${API_BASE_URL}/api/cats`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setCats(response.data);
       } catch (error) {
         if (error.response && error.response.status === 401) {
