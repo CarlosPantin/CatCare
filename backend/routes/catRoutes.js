@@ -42,7 +42,6 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
-// POST route to create a new cat with photo upload
 router.post(
   "/cats",
   authenticateUser,
@@ -79,11 +78,9 @@ router.post(
   }
 );
 
-// GET route to fetch all cats for the authenticated user
 router.get("/cats", authenticateUser, async (req, res) => {
   try {
     const cats = await Cat.find({ owner: req.user._id });
-    console.log("Fetched cats:", cats);
     res.status(200).json(cats);
   } catch (err) {
     console.error("Error fetching cats:", err);
@@ -91,7 +88,6 @@ router.get("/cats", authenticateUser, async (req, res) => {
   }
 });
 
-// GET route to fetch a specific cat by ID
 router.get("/cats/:id", authenticateUser, async (req, res) => {
   try {
     const cat = await Cat.findById(req.params.id).populate("owner");
@@ -100,7 +96,10 @@ router.get("/cats/:id", authenticateUser, async (req, res) => {
       return res.status(404).json({ error: "Cat not found" });
     }
 
-    if (cat.owner.toString() !== req.user._id.toString()) {
+    console.log("Cat Owner ID:", cat.owner._id.toString());
+    console.log("User ID:", req.user._id.toString());
+
+    if (cat.owner._id.toString() !== req.user._id.toString()) {
       return res
         .status(403)
         .json({ error: "You are not the owner of this cat" });
@@ -113,7 +112,6 @@ router.get("/cats/:id", authenticateUser, async (req, res) => {
   }
 });
 
-// PUT route to update a cat's details
 router.put("/cats/:id", authenticateUser, async (req, res) => {
   try {
     const cat = await Cat.findById(req.params.id);
@@ -122,7 +120,10 @@ router.put("/cats/:id", authenticateUser, async (req, res) => {
       return res.status(404).json({ error: "Cat not found" });
     }
 
-    if (cat.owner.toString() !== req.user._id.toString()) {
+    console.log("Cat Owner ID:", cat.owner._id.toString());
+    console.log("User ID:", req.user._id.toString());
+
+    if (cat.owner._id.toString() !== req.user._id.toString()) {
       return res
         .status(403)
         .json({ error: "You are not the owner of this cat" });
@@ -139,7 +140,6 @@ router.put("/cats/:id", authenticateUser, async (req, res) => {
   }
 });
 
-// DELETE route to delete a cat
 router.delete("/cats/:id", authenticateUser, async (req, res) => {
   try {
     const cat = await Cat.findById(req.params.id);
@@ -148,7 +148,10 @@ router.delete("/cats/:id", authenticateUser, async (req, res) => {
       return res.status(404).json({ error: "Cat not found" });
     }
 
-    if (cat.owner.toString() !== req.user._id.toString()) {
+    console.log("Cat Owner ID:", cat.owner._id.toString());
+    console.log("User ID:", req.user._id.toString());
+
+    if (cat.owner._id.toString() !== req.user._id.toString()) {
       return res
         .status(403)
         .json({ error: "You are not the owner of this cat" });

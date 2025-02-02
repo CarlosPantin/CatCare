@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const catRoutes = require("./routes/catRoutes");
+const generalNotesRoutes = require("./routes/generalNotes");
 const path = require("path");
 
 dotenv.config();
@@ -11,12 +12,12 @@ dotenv.config();
 const app = express();
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Middleware
 app.use(express.json());
 app.use(cors());
 
 app.use("/api/users", userRoutes);
 app.use("/api", catRoutes);
+app.use("/api/generalnotes", generalNotesRoutes);
 
 const allowedOrigins = [
   "http://localhost:3000",

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import AddCatForm from "./AddCatForm";
 import "./Dashboard.css";
 
@@ -7,10 +8,12 @@ const Dashboard = () => {
   const [cats, setCats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCats = async () => {
       const token = localStorage.getItem("token");
+      console.log(token);
 
       if (!token) {
         alert("No token found. Please log in again.");
@@ -50,15 +53,25 @@ const Dashboard = () => {
     setShowForm(false);
   };
 
+  const handleCatClick = (catId) => {
+    console.log("Navigating to cat:", catId);
+    navigate(`/cats/${catId}`);
+  };
+
   if (loading) {
-    return <div className="dashboard-loading-message">Loading your cats...</div>;
+    return (
+      <div className="dashboard-loading-message">Loading your cats...</div>
+    );
   }
 
   return (
     <div className="dashboard-main-container">
       <h1 className="dashboard-header">Your Cats</h1>
 
-      <button className="dashboard-toggle-form-button" onClick={() => setShowForm(!showForm)}>
+      <button
+        className="dashboard-toggle-form-button"
+        onClick={() => setShowForm(!showForm)}
+      >
         {showForm ? "Hide Form" : "Add a New Cat"}
       </button>
 
@@ -69,7 +82,12 @@ const Dashboard = () => {
           {cats.length > 0 ? (
             <div className="dashboard-cat-list-container">
               {cats.map((cat) => (
-                <div key={cat._id} className="dashboard-cat-card">
+                <div
+                  key={cat._id}
+                  className="dashboard-cat-card"
+                  onClick={() => handleCatClick(cat._id)}
+                  style={{ cursor: "pointer" }}
+                >
                   <img
                     src={
                       cat.photo
@@ -82,13 +100,19 @@ const Dashboard = () => {
                   <h3 className="dashboard-cat-name">{cat.name}</h3>
                   <p className="dashboard-cat-breed">Breed: {cat.breed}</p>
                   <p className="dashboard-cat-gender">Gender: {cat.gender}</p>
-                  <p className="dashboard-cat-weight">Weight: {cat.weight} kg</p>
-                  <p className="dashboard-cat-neutered">Neutered: {cat.neutered ? "Yes" : "No"}</p>
+                  <p className="dashboard-cat-weight">
+                    Weight: {cat.weight} kg
+                  </p>
+                  <p className="dashboard-cat-neutered">
+                    Neutered: {cat.neutered ? "Yes" : "No"}
+                  </p>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="dashboard-no-cats-message">You have no cats associated with your account.</p>
+            <p className="dashboard-no-cats-message">
+              You have no cats associated with your account.
+            </p>
           )}
         </>
       )}

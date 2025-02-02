@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const catSchema = new mongoose.Schema({
   name: {
@@ -11,7 +11,7 @@ const catSchema = new mongoose.Schema({
   },
   breed: {
     type: String,
-    default: 'Unknown',
+    default: "Unknown",
   },
   neutered: {
     type: Boolean,
@@ -19,7 +19,7 @@ const catSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-    enum: ['Male', 'Female'],
+    enum: ["Male", "Female"],
     required: true,
   },
   weight: {
@@ -27,16 +27,72 @@ const catSchema = new mongoose.Schema({
     default: null,
   },
   photo: {
-    type: String, 
+    type: String,
     default: null,
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
+  medicalHistory: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "MedicalHistory",
+  },
+  dietAndFeeding: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "DietAndFeeding",
+  },
+  exerciseAndActivity: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ExerciseAndActivity",
+    },
+  ],
+  behaviorNotes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "BehaviorNote",
+    },
+  ],
+  environmentalFactors: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "EnvironmentalFactor",
+    },
+  ],
+  importantDates: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ImportantDate",
+    },
+  ],
+  photoGallery: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PhotoGallery",
+    },
+  ],
+  weightTracker: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "WeightTracker",
+    },
+  ],
+  shoppingList: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ShoppingList",
+    },
+  ],
+  generalNotes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "GeneralNote",
+    },
+  ],
 });
 
-const Cat = mongoose.model('Cat', catSchema);
+const Cat = mongoose.model("Cat", catSchema);
 
 module.exports = Cat;
