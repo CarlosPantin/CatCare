@@ -39,17 +39,18 @@ const AddCatForm = ({ onCatAdded }) => {
     data.append("gender", formData.gender);
     data.append("weight", formData.weight);
     data.append("photo", formData.photo);
+    const API_BASE_URL =
+      process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_API_BASE_URL_PRODUCTION
+        : process.env.REACT_APP_API_BASE_URL;
+
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/api/cats`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post(`${API_BASE_URL}/api/cats`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       onCatAdded(response.data);
 
