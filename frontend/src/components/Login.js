@@ -18,6 +18,8 @@ const LoginForm = () => {
         ? "https://catcare-clak.onrender.com"
         : "http://localhost:5000";
 
+    console.log(API_BASE_URL);
+
     try {
       const response = await axios.post(`${API_BASE_URL}/api/users/login`, {
         email,
