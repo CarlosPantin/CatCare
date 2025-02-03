@@ -1,0 +1,45 @@
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
+  transition: 0.3s ease-in-out;
+}
+
+.container:hover {
+  transform: translateY(-5px);
+}
+
+.catName {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+}
+
+.details {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #555;
+}
+
+.tag {
+  display: inline-block;
+  background: #4caf50;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.neutered {
+  background: #ff9800;
+}
+
+.icon {
+  color: #4caf50;
+  margin-right: 8px;
+}
