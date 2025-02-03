@@ -5,6 +5,7 @@ const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const catRoutes = require("./routes/catRoutes");
 const generalNotesRoutes = require("./routes/generalNotes");
+const importantDatesRoutes = require("./routes/importantDates");
 const path = require("path");
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(cors());
 app.use("/api/users", userRoutes);
 app.use("/api", catRoutes);
 app.use("/api/generalnotes", generalNotesRoutes);
+app.use("/api/importantdates", importantDatesRoutes);
 
 const allowedOrigins = [
   "http://localhost:3000",

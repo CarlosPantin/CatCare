@@ -13,6 +13,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import Sidebar from "./SideBar";
 import GeneralNotes from "./GeneralNotes";
+import ImportantDates from "./ImportantDates";
 
 const CatDetails = () => {
   const [cat, setCat] = useState(null);
@@ -118,9 +119,12 @@ const CatDetails = () => {
             </Paper>
           </Grid>
 
-          {/* General Notes */}
           <Grid item xs={12}>
             <GeneralNotes catId={catId} />
+          </Grid>
+
+          <Grid item xs={12}>
+            <ImportantDates catId={catId} />{" "}
           </Grid>
         </Grid>
       </Paper>
