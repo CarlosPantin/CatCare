@@ -39,10 +39,9 @@ const catSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "MedicalHistory",
   },
-  dietAndFeeding: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "DietAndFeeding",
-  },
+  dietAndFeeding: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "DietAndFeeding" },
+  ],
   exerciseAndActivity: [
     {
       type: mongoose.Schema.Types.ObjectId,
