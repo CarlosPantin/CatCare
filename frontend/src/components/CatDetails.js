@@ -132,9 +132,6 @@ const CatDetails = () => {
           <Grid item xs={12}>
             <DietAndFeeding catId={catId} />{" "}
           </Grid>
-          <Grid item xs={12}>
-            <MedicalHistory catId={catId} />{" "}
-          </Grid>
         </Grid>
       </Paper>
     </Container>
