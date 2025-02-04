@@ -15,6 +15,7 @@ import Sidebar from "./SideBar";
 import GeneralNotes from "./GeneralNotes";
 import ImportantDates from "./ImportantDates";
 import DietAndFeeding from "../components/DietAndFeeding";
+import MedicalHistory from "../components/MedicalHistory";
 
 const CatDetails = () => {
   const [cat, setCat] = useState(null);
@@ -130,6 +131,9 @@ const CatDetails = () => {
 
           <Grid item xs={12}>
             <DietAndFeeding catId={catId} />{" "}
+          </Grid>
+          <Grid item xs={12}>
+            <MedicalHistory catId={catId} />{" "}
           </Grid>
         </Grid>
       </Paper>

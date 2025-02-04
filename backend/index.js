@@ -7,6 +7,7 @@ const catRoutes = require("./routes/catRoutes");
 const generalNotesRoutes = require("./routes/generalNotes");
 const importantDatesRoutes = require("./routes/importantDates");
 const dietAndFeedingRoutes = require("./routes/dietAndFeeding");
+const medicalHistoryRoutes = require("./routes/medicalHistory");
 const path = require("path");
 
 dotenv.config();
@@ -22,6 +23,7 @@ app.use("/api", catRoutes);
 app.use("/api/generalnotes", generalNotesRoutes);
 app.use("/api/importantdates", importantDatesRoutes);
 app.use("/api/dietandfeeding", dietAndFeedingRoutes);
+app.use("/api/medicalhistory", medicalHistoryRoutes);
 
 const allowedOrigins = [
   "http://localhost:3000",

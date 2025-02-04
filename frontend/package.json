@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.2",
     "@mui/material": "^6.4.2",
+    "@mui/x-date-pickers": "^7.25.0",
     "@tailwindcss/vite": "^4.0.0",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
