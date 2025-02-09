@@ -83,9 +83,15 @@ const CatDetails = () => {
       />
 
       <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+        {/* AppBar Style Update */}
         <AppBar
-          position="static"
-          sx={{ backgroundColor: "#1976D2", boxShadow: "none" }}
+          position="fixed"
+          sx={{
+            backgroundColor: "#1976D2",
+            boxShadow: "none",
+            height: "60px",
+            transition: "height 0.3s",
+          }}
         >
           <Toolbar>
             <IconButton
@@ -96,79 +102,114 @@ const CatDetails = () => {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6">{cat.name}'s Dashboard</Typography>
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+              {cat.name}'s Dashboard
+            </Typography>
           </Toolbar>
         </AppBar>
 
-        <Box sx={{ padding: "20px", overflowY: "auto", flexGrow: 1 }}>
+        {/* Main Content with Padding and Overflows */}
+        <Box
+          sx={{
+            padding: "80px 20px 20px", // Adjusted for AppBar
+            overflowY: "auto",
+            flexGrow: 1,
+            backgroundColor: "#FFFFFF",
+          }}
+        >
           <Grid container spacing={3}>
+            {/* Basic Info Card */}
             <Grid item xs={12} md={4}>
               <Paper
-                elevation={3}
-                sx={{ padding: "20px", borderRadius: "10px" }}
+                elevation={4}
+                sx={{
+                  padding: "20px",
+                  borderRadius: "8px",
+                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.15)",
+                  },
+                }}
               >
                 <Typography
                   variant="h6"
                   fontWeight="bold"
                   display="flex"
                   alignItems="center"
+                  sx={{
+                    marginBottom: "15px",
+                    color: "#FF6F61",
+                  }}
                 >
-                  <Pets sx={{ marginRight: "8px", color: "#FF6F61" }} /> Basic
-                  Info
+                  <Pets sx={{ marginRight: "8px" }} /> Basic Info
                 </Typography>
-                <Typography>Breed: {cat.breed}</Typography>
-                <Typography>Gender: {cat.gender}</Typography>
-                <Typography>Weight: {cat.weight} kg</Typography>
-                <Typography>Neutered: {cat.neutered ? "Yes" : "No"}</Typography>
+                <Typography sx={{ marginBottom: "8px" }}>
+                  Breed: {cat.breed}
+                </Typography>
+                <Typography sx={{ marginBottom: "8px" }}>
+                  Gender: {cat.gender}
+                </Typography>
+                <Typography sx={{ marginBottom: "8px" }}>
+                  Weight: {cat.weight} kg
+                </Typography>
+                <Typography sx={{ marginBottom: "8px" }}>
+                  Neutered: {cat.neutered ? "Yes" : "No"}
+                </Typography>
               </Paper>
             </Grid>
 
+            {/* Health Overview Card */}
             <Grid item xs={12} md={4}>
               <Paper
-                elevation={3}
-                sx={{ padding: "20px", borderRadius: "10px" }}
+                elevation={4}
+                sx={{
+                  padding: "20px",
+                  borderRadius: "8px",
+                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.15)",
+                  },
+                }}
               >
                 <Typography
                   variant="h6"
                   fontWeight="bold"
                   display="flex"
                   alignItems="center"
+                  sx={{
+                    marginBottom: "15px",
+                    color: "#4CAF50",
+                  }}
                 >
-                  <HealthAndSafety
-                    sx={{ marginRight: "8px", color: "#4CAF50" }}
-                  />{" "}
-                  Health Overview
+                  <HealthAndSafety sx={{ marginRight: "8px" }} /> Health
+                  Overview
                 </Typography>
-                <Typography>
+                <Typography sx={{ marginBottom: "8px" }}>
                   Vaccinated: {cat.vaccinated ? "Yes" : "No"}
                 </Typography>
-                <Typography>
+                <Typography sx={{ marginBottom: "8px" }}>
                   Medical Conditions: {cat.medicalConditions || "None"}
                 </Typography>
               </Paper>
             </Grid>
 
+            {/* Shopping List */}
             <Grid item xs={12} md={4}>
-              <Paper
-                elevation={3}
-                sx={{ padding: "20px", borderRadius: "10px" }}
-              >
-                <ShoppingList catId={catId} />
-              </Paper>
+              <ShoppingList catId={catId} />
             </Grid>
 
+            {/* Other Sections */}
             <Grid item xs={12}>
               <GeneralNotes catId={catId} />
             </Grid>
-
             <Grid item xs={12}>
               <ImportantDates catId={catId} />
             </Grid>
-
             <Grid item xs={12}>
               <DietAndFeeding catId={catId} />
             </Grid>
-
             <Grid item xs={12}>
               <MedicalHistory catId={catId} />
             </Grid>

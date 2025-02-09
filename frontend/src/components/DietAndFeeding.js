@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Card,
-  CardContent,
+  Paper,
   Typography,
   TextField,
   Button,
@@ -10,18 +9,27 @@ import {
   ListItem,
   IconButton,
   CircularProgress,
+  Fab,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Add } from "@mui/icons-material";
+import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const DietAndFeeding = ({ catId }) => {
   const [feedingData, setFeedingData] = useState([]);
   const [newEntry, setNewEntry] = useState({
-    time: "",
+    time: null,
     portion: "",
     foodType: "",
     notes: "",
   });
   const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const fetchFeedingData = async () => {
@@ -82,7 +90,8 @@ const DietAndFeeding = ({ catId }) => {
       );
 
       setFeedingData([...feedingData, response.data]);
-      setNewEntry({ time: "", portion: "", foodType: "", notes: "" });
+      setNewEntry({ time: null, portion: "", foodType: "", notes: "" });
+      setOpenModal(false);
     } catch (error) {
       alert("Error adding feeding entry.");
     }
@@ -119,98 +128,149 @@ const DietAndFeeding = ({ catId }) => {
   }
 
   return (
-    <Card sx={{ marginTop: 2, padding: 2 }}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Diet & Feeding
-        </Typography>
+    <Paper
+      elevation={3}
+      sx={{
+        padding: "20px",
+        borderRadius: "10px",
+        marginTop: "20px",
+        backgroundColor: "#FFFBF2",
+        boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.1)",
+        minHeight: "300px",
+        position: "relative",
+        border: "1px solid #E0C9A6",
+      }}
+    >
+      <Typography
+        variant="h5"
+        gutterBottom
+        sx={{
+          fontFamily: "'Shadows Into Light', cursive",
+          color: "#5A4A42",
+          borderBottom: "2px dashed #E0C9A6",
+          paddingBottom: "5px",
+        }}
+      >
+        Diet & Feeding 🍽️
+      </Typography>
 
-        {feedingData.length === 0 ? (
-          <Typography>No feeding data available.</Typography>
-        ) : (
-          <List>
-            {feedingData.map((entry) => (
-              <ListItem
-                key={entry._id}
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  background: "#f7f7f7",
-                  borderRadius: "5px",
-                  marginBottom: "8px",
-                  padding: "10px",
-                }}
+      {feedingData.length === 0 ? (
+        <Typography color="textSecondary" sx={{ fontStyle: "italic" }}>
+          No feeding data available.
+        </Typography>
+      ) : (
+        <List sx={{ paddingLeft: "10px", paddingRight: "10px" }}>
+          {feedingData.map((entry) => (
+            <ListItem
+              key={entry._id}
+              divider
+              sx={{
+                backgroundColor: "transparent",
+                marginBottom: "5px",
+                padding: "8px 0",
+                fontFamily: "'Shadows Into Light', cursive",
+                fontSize: "18px",
+                color: "#5A4A42",
+                position: "relative",
+                "&:before": {
+                  content: '""',
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "1px",
+                  backgroundColor: "#E0C9A6",
+                  opacity: 0.5,
+                },
+              }}
+            >
+              <Typography>
+                <strong>{entry.time}</strong> - {entry.foodType} (
+                {entry.portion})
+              </Typography>
+              <IconButton
+                onClick={() => handleDeleteEntry(entry._id)}
+                color="error"
+                sx={{ marginLeft: "auto" }}
               >
-                <Typography>
-                  <strong>{entry.time}</strong> - {entry.foodType} (
-                  {entry.portion})
-                </Typography>
-                <IconButton
-                  onClick={() => handleDeleteEntry(entry._id)}
-                  color="error"
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </ListItem>
-            ))}
-          </List>
-        )}
+                <DeleteIcon />
+              </IconButton>
+            </ListItem>
+          ))}
+        </List>
+      )}
 
-        <Typography variant="subtitle1" sx={{ marginTop: 2 }}>
-          Add Feeding Entry
-        </Typography>
-        <TextField
-          label="Time (e.g., 8:00 AM)"
-          variant="outlined"
-          size="small"
-          fullWidth
-          sx={{ marginBottom: 1 }}
-          value={newEntry.time}
-          onChange={(e) => setNewEntry({ ...newEntry, time: e.target.value })}
-        />
-        <TextField
-          label="Portion (e.g., 1 cup)"
-          variant="outlined"
-          size="small"
-          fullWidth
-          sx={{ marginBottom: 1 }}
-          value={newEntry.portion}
-          onChange={(e) =>
-            setNewEntry({ ...newEntry, portion: e.target.value })
-          }
-        />
-        <TextField
-          label="Food Type (e.g., Dry, Wet)"
-          variant="outlined"
-          size="small"
-          fullWidth
-          sx={{ marginBottom: 1 }}
-          value={newEntry.foodType}
-          onChange={(e) =>
-            setNewEntry({ ...newEntry, foodType: e.target.value })
-          }
-        />
-        <TextField
-          label="Notes (optional)"
-          variant="outlined"
-          size="small"
-          fullWidth
-          multiline
-          rows={2}
-          sx={{ marginBottom: 1 }}
-          value={newEntry.notes}
-          onChange={(e) => setNewEntry({ ...newEntry, notes: e.target.value })}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleAddEntry}
-          sx={{ marginTop: 1 }}
-        >
-          Add Entry
-        </Button>
-      </CardContent>
-    </Card>
+      <Fab
+        color="primary"
+        aria-label="add"
+        onClick={() => setOpenModal(true)}
+        sx={{
+          position: "absolute",
+          bottom: 16,
+          right: 16,
+          bgcolor: "#FF6F61",
+          "&:hover": { bgcolor: "#E64A45" },
+        }}
+      >
+        <Add />
+      </Fab>
+
+      <Dialog open={openModal} onClose={() => setOpenModal(false)}>
+        <DialogTitle>Add Feeding Entry</DialogTitle>
+        <DialogContent>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <TimePicker
+              label="Time"
+              value={newEntry.time}
+              onChange={(newTime) =>
+                setNewEntry({ ...newEntry, time: newTime })
+              }
+              renderInput={(params) => <TextField {...params} fullWidth />}
+            />
+          </LocalizationProvider>
+          <TextField
+            label="Portion (e.g., 1 cup)"
+            variant="outlined"
+            fullWidth
+            value={newEntry.portion}
+            onChange={(e) =>
+              setNewEntry({ ...newEntry, portion: e.target.value })
+            }
+            sx={{ marginBottom: 2 }}
+          />
+          <TextField
+            label="Food Type (e.g., Dry, Wet)"
+            variant="outlined"
+            fullWidth
+            value={newEntry.foodType}
+            onChange={(e) =>
+              setNewEntry({ ...newEntry, foodType: e.target.value })
+            }
+            sx={{ marginBottom: 2 }}
+          />
+          <TextField
+            label="Notes (optional)"
+            variant="outlined"
+            fullWidth
+            multiline
+            rows={2}
+            value={newEntry.notes}
+            onChange={(e) =>
+              setNewEntry({ ...newEntry, notes: e.target.value })
+            }
+            sx={{ marginBottom: 2 }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenModal(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleAddEntry} color="primary" variant="contained">
+            Add Entry
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Paper>
   );
 };
 
