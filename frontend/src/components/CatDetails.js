@@ -16,6 +16,7 @@ import GeneralNotes from "./GeneralNotes";
 import ImportantDates from "./ImportantDates";
 import DietAndFeeding from "../components/DietAndFeeding";
 import MedicalHistory from "../components/MedicalHistory";
+import ShoppingList from "../components/ShoppingList";
 
 const CatDetails = () => {
   const [cat, setCat] = useState(null);
@@ -135,6 +136,9 @@ const CatDetails = () => {
         </Grid>
         <Grid item xs={12}>
           <MedicalHistory catId={catId} />
+        </Grid>
+        <Grid item xs={12}>
+          <ShoppingList catId={catId} />
         </Grid>
       </Paper>
     </Container>
