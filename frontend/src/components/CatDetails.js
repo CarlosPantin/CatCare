@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import {
-  Container,
   Typography,
   Grid,
   Paper,
   CircularProgress,
-  Divider,
   IconButton,
+  Box,
+  Toolbar,
+  AppBar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Sidebar from "./SideBar";
@@ -17,6 +18,7 @@ import ImportantDates from "./ImportantDates";
 import DietAndFeeding from "../components/DietAndFeeding";
 import MedicalHistory from "../components/MedicalHistory";
 import ShoppingList from "../components/ShoppingList";
+import { Pets, HealthAndSafety } from "@mui/icons-material";
 
 const CatDetails = () => {
   const [cat, setCat] = useState(null);
@@ -74,74 +76,106 @@ const CatDetails = () => {
   }
 
   return (
-    <Container maxWidth="lg" style={{ marginTop: "20px" }}>
+    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#F4F6F8" }}>
       <Sidebar
         isOpen={sidebarOpen}
-        toggleSidebar={() => setSidebarOpen(false)}
+        toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
       />
 
-      <IconButton
-        onClick={() => setSidebarOpen(true)}
-        style={{ position: "absolute", left: 20, top: 20 }}
-      >
-        <MenuIcon fontSize="large" />
-      </IconButton>
-
-      <Paper elevation={3} style={{ padding: "20px", borderRadius: "10px" }}>
-        <Typography variant="h4" gutterBottom>
-          {cat.name}'s Dashboard
-        </Typography>
-        <Divider style={{ marginBottom: "20px" }} />
-
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <Paper
-              elevation={2}
-              style={{ padding: "15px", borderRadius: "8px" }}
+      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+        <AppBar
+          position="static"
+          sx={{ backgroundColor: "#1976D2", boxShadow: "none" }}
+        >
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              sx={{ marginRight: "10px" }}
             >
-              <Typography variant="h6">Basic Info</Typography>
-              <Typography>Breed: {cat.breed}</Typography>
-              <Typography>Gender: {cat.gender}</Typography>
-              <Typography>Weight: {cat.weight} kg</Typography>
-              <Typography>Neutered: {cat.neutered ? "Yes" : "No"}</Typography>
-            </Paper>
-          </Grid>
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6">{cat.name}'s Dashboard</Typography>
+          </Toolbar>
+        </AppBar>
 
-          <Grid item xs={12} md={6}>
-            <Paper
-              elevation={2}
-              style={{ padding: "15px", borderRadius: "8px" }}
-            >
-              <Typography variant="h6">Health Overview</Typography>
-              <Typography>
-                Vaccinated: {cat.vaccinated ? "Yes" : "No"}
-              </Typography>
-              <Typography>
-                Medical Conditions: {cat.medicalConditions || "None"}
-              </Typography>
-            </Paper>
-          </Grid>
+        <Box sx={{ padding: "20px", overflowY: "auto", flexGrow: 1 }}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={4}>
+              <Paper
+                elevation={3}
+                sx={{ padding: "20px", borderRadius: "10px" }}
+              >
+                <Typography
+                  variant="h6"
+                  fontWeight="bold"
+                  display="flex"
+                  alignItems="center"
+                >
+                  <Pets sx={{ marginRight: "8px", color: "#FF6F61" }} /> Basic
+                  Info
+                </Typography>
+                <Typography>Breed: {cat.breed}</Typography>
+                <Typography>Gender: {cat.gender}</Typography>
+                <Typography>Weight: {cat.weight} kg</Typography>
+                <Typography>Neutered: {cat.neutered ? "Yes" : "No"}</Typography>
+              </Paper>
+            </Grid>
 
-          <Grid item xs={12}>
-            <GeneralNotes catId={catId} />
-          </Grid>
+            <Grid item xs={12} md={4}>
+              <Paper
+                elevation={3}
+                sx={{ padding: "20px", borderRadius: "10px" }}
+              >
+                <Typography
+                  variant="h6"
+                  fontWeight="bold"
+                  display="flex"
+                  alignItems="center"
+                >
+                  <HealthAndSafety
+                    sx={{ marginRight: "8px", color: "#4CAF50" }}
+                  />{" "}
+                  Health Overview
+                </Typography>
+                <Typography>
+                  Vaccinated: {cat.vaccinated ? "Yes" : "No"}
+                </Typography>
+                <Typography>
+                  Medical Conditions: {cat.medicalConditions || "None"}
+                </Typography>
+              </Paper>
+            </Grid>
 
-          <Grid item xs={12}>
-            <ImportantDates catId={catId} />{" "}
-          </Grid>
+            <Grid item xs={12} md={4}>
+              <Paper
+                elevation={3}
+                sx={{ padding: "20px", borderRadius: "10px" }}
+              >
+                <ShoppingList catId={catId} />
+              </Paper>
+            </Grid>
 
-          <Grid item xs={12}>
-            <DietAndFeeding catId={catId} />{" "}
+            <Grid item xs={12}>
+              <GeneralNotes catId={catId} />
+            </Grid>
+
+            <Grid item xs={12}>
+              <ImportantDates catId={catId} />
+            </Grid>
+
+            <Grid item xs={12}>
+              <DietAndFeeding catId={catId} />
+            </Grid>
+
+            <Grid item xs={12}>
+              <MedicalHistory catId={catId} />
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <MedicalHistory catId={catId} />
-        </Grid>
-        <Grid item xs={12}>
-          <ShoppingList catId={catId} />
-        </Grid>
-      </Paper>
-    </Container>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

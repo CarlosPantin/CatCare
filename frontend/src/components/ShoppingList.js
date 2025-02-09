@@ -5,27 +5,30 @@ import {
   Typography,
   List,
   ListItem,
-  ListItemText,
-  TextField,
+  IconButton,
+  Fab,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   Button,
+  TextField,
   MenuItem,
   Select,
-  IconButton,
-  CircularProgress,
 } from "@mui/material";
-import { Delete, Add } from "@mui/icons-material";
+import { Add, Delete } from "@mui/icons-material";
 
 const ShoppingList = ({ catId }) => {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [priority, setPriority] = useState("Medium");
+  const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchItems = async () => {
       const token = localStorage.getItem("token");
-
       if (!token) {
         alert("No token found. Please log in again.");
         return;
@@ -78,6 +81,7 @@ const ShoppingList = ({ catId }) => {
       setNewItem("");
       setQuantity(1);
       setPriority("Medium");
+      setOpenModal(false);
     } catch (error) {
       alert("Error adding item.");
     }
@@ -105,36 +109,68 @@ const ShoppingList = ({ catId }) => {
     }
   };
 
-  if (loading) {
-    return (
-      <CircularProgress style={{ display: "block", margin: "20px auto" }} />
-    );
-  }
-
   return (
     <Paper
       elevation={3}
-      style={{ padding: "20px", borderRadius: "10px", marginTop: "20px" }}
+      sx={{
+        padding: "20px",
+        borderRadius: "10px",
+        marginTop: "20px",
+        backgroundColor: "#FFFBF2",
+        boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.1)",
+        minHeight: "300px",
+        position: "relative",
+        border: "1px solid #E0C9A6",
+      }}
     >
-      <Typography variant="h5" gutterBottom>
-        Shopping List
+      <Typography
+        variant="h5"
+        gutterBottom
+        sx={{
+          fontFamily: "'Shadows Into Light', cursive",
+          color: "#5A4A42",
+          borderBottom: "2px dashed #E0C9A6",
+          paddingBottom: "5px",
+        }}
+      >
+        Shopping List 📝
       </Typography>
 
-      <List>
+      <List sx={{ paddingLeft: "10px", paddingRight: "10px" }}>
         {items.length === 0 ? (
-          <Typography color="textSecondary">
-            No items in shopping list.
+          <Typography color="textSecondary" sx={{ fontStyle: "italic" }}>
+            No items yet... Add some! 😊
           </Typography>
         ) : (
           items.map((item) => (
-            <ListItem key={item._id} divider>
-              <ListItemText
-                primary={`${item.item} (x${item.quantity})`}
-                secondary={`Priority: ${item.priority}`}
-              />
+            <ListItem
+              key={item._id}
+              divider
+              sx={{
+                backgroundColor: "transparent",
+                marginBottom: "5px",
+                padding: "8px 0",
+                fontFamily: "'Shadows Into Light', cursive",
+                fontSize: "18px",
+                color: "#5A4A42",
+                position: "relative",
+                "&:before": {
+                  content: '""',
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "1px",
+                  backgroundColor: "#E0C9A6",
+                  opacity: 0.5,
+                },
+              }}
+            >
+              ✏️ {item.item} (x{item.quantity}) - {item.priority}
               <IconButton
                 onClick={() => handleDeleteItem(item._id)}
                 color="error"
+                sx={{ marginLeft: "auto" }}
               >
                 <Delete />
               </IconButton>
@@ -143,45 +179,65 @@ const ShoppingList = ({ catId }) => {
         )}
       </List>
 
-      {/* Add New Item */}
-      <TextField
-        label="Item"
-        variant="outlined"
-        fullWidth
-        value={newItem}
-        onChange={(e) => setNewItem(e.target.value)}
-        style={{ marginTop: "10px" }}
-      />
-      <TextField
-        label="Quantity"
-        type="number"
-        variant="outlined"
-        fullWidth
-        value={quantity}
-        onChange={(e) => setQuantity(e.target.value)}
-        style={{ marginTop: "10px" }}
-      />
-      <Select
-        value={priority}
-        onChange={(e) => setPriority(e.target.value)}
-        fullWidth
-        variant="outlined"
-        style={{ marginTop: "10px" }}
-      >
-        <MenuItem value="High">High</MenuItem>
-        <MenuItem value="Medium">Medium</MenuItem>
-        <MenuItem value="Low">Low</MenuItem>
-      </Select>
-      <Button
-        variant="contained"
+      <Fab
         color="primary"
-        fullWidth
-        startIcon={<Add />}
-        onClick={handleAddItem}
-        style={{ marginTop: "10px" }}
+        aria-label="add"
+        onClick={() => setOpenModal(true)}
+        sx={{
+          position: "absolute",
+          bottom: 16,
+          right: 16,
+          bgcolor: "#FF6F61",
+          "&:hover": { bgcolor: "#E64A45" },
+        }}
       >
-        Add Item
-      </Button>
+        <Add />
+      </Fab>
+
+      <Dialog open={openModal} onClose={() => setOpenModal(false)}>
+        <DialogTitle>Add Shopping Item</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Item Name"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={newItem}
+            onChange={(e) => setNewItem(e.target.value)}
+          />
+          <TextField
+            margin="dense"
+            label="Quantity"
+            type="number"
+            fullWidth
+            variant="outlined"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+            sx={{ marginTop: "10px" }}
+          />
+          <Select
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+            fullWidth
+            variant="outlined"
+            sx={{ marginTop: "10px" }}
+          >
+            <MenuItem value="High">High</MenuItem>
+            <MenuItem value="Medium">Medium</MenuItem>
+            <MenuItem value="Low">Low</MenuItem>
+          </Select>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenModal(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleAddItem} color="primary" variant="contained">
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 };
