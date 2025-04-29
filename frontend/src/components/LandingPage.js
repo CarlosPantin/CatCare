@@ -39,17 +39,17 @@ const LandingPage = () => {
 
       <div className="landing-content animate-on-scroll">
         <div className="text-section">
-          <h1>Welcome to CatCare</h1>
-          <h2>Take Care of Your Cat in the Best Way</h2>
+          <h1>Welcome to Whiskr</h1>
+          <h2>Your pet's health care in your pocket</h2>
           <p>
-            Join the CatCare community and manage your cat’s health and care
+            Join the Whiskr community and manage your cat’s health and care
             routines easily!
           </p>
 
           <ul className="benefits-list">
-            <li>🐾 Track your cat’s health & habits</li>
+            <li>🐾 Track your pet's health & habits</li>
             <li>📅 Set reminders for feeding & vet visits</li>
-            <li>🛠️ Access expert cat care tips</li>
+            <li>🛠️ Access expert pet care tips</li>
             <li>📊 Monitor weight, diet, and activity</li>
           </ul>
 
